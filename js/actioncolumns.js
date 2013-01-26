@@ -42,9 +42,9 @@
                     width: 70,
                     renderer: function (value, metaData, record, row, col, store, gridView) {
                         if (value == null || value == true) {
-                            return '<img action="disable" src="/images/cross.png" alt="Is Default" title="Some title" class="grid-icon" />';
+                            return '<img action="disable" src="https://raw.github.com/werdender/ext4examples/master/images/cross.png" alt="Is Default" title="Some title" class="grid-icon" />';
                         } else {
-                            return '<img action="enable" src="/images/add.png" alt="Is Default" title="Some title" class="grid-icon" />';
+                            return '<img action="enable" src="https://raw.github.com/werdender/ext4examples/master/images/add.png" alt="Is Default" title="Some title" class="grid-icon" />';
                         }
                     }
                 }],
