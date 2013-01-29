@@ -15,6 +15,12 @@
                     }
                     if(rv) {
                         if(de[0].queryMode == 'remote' && de[0].forceSelection) {
+                            de[0].store.filters.removeAtKey(el.detailField);
+                            de[0].store.filters.add(el.detailField, new Ext.util.Filter({
+                                    property: el.detailField,
+                                    value: rv
+                                }
+                            ));
                             var s = de.store.sorters;
                             de[0].store.load({
                                 params: {
@@ -25,6 +31,8 @@
                                 }
                             })
                         }else{
+                            de[0].store.clearFilter();
+                            de[0].store.filter(el.detailField, rv);
                             de[0].setValue(rv);
                         }
                     }
@@ -39,11 +47,11 @@
      */
     Ext.create('Ext.data.Store', {
         storeId:'masterStore',
-        fields:['id', 'display'],
+        fields:['id', 'master_id', 'display'],
         data: [
-            { 'id': 1,  'display': 'One' },
-            { 'id': 2,  'display': 'Two' },
-            { 'id': 3,  'display': 'Three' }
+            { 'id': 1, 'master_id': 1, 'display': 'One' },
+            { 'id': 2, 'master_id': 2, 'display': 'Two' },
+            { 'id': 3, 'master_id': 3, 'display': 'Three' }
         ],
         proxy: {
             type: 'memory',
@@ -55,11 +63,19 @@
 
     Ext.create('Ext.data.Store', {
         storeId:'detailStore',
-        fields:['id', 'display'],
+        fields:['id', 'master_id', 'display'],
         data: [
-            { 'id': 1,  'display': 'Detail One' },
-            { 'id': 2,  'display': 'Detail Two' },
-            { 'id': 3,  'display': 'Detail Three' }
+            { 'id': 1, 'master_id': 1, 'display': 'Detail One (master id  = 1)' },
+            { 'id': 2, 'master_id': 1, 'display': 'Detail Two (master id = 1)' },
+            { 'id': 3, 'master_id': 1, 'display': 'Detail Three (master id = 1)' },
+
+            { 'id': 4, 'master_id': 2, 'display': 'Detail One (master id  = 2)' },
+            { 'id': 5, 'master_id': 2, 'display': 'Detail Two (master id = 2)' },
+            { 'id': 6, 'master_id': 2, 'display': 'Detail Three (master id = 2)' },
+
+            { 'id': 7, 'master_id': 3, 'display': 'Detail One (master id  = 3)' },
+            { 'id': 8, 'master_id': 3, 'display': 'Detail Two (master id = 3)' },
+            { 'id': 9, 'master_id': 3, 'display': 'Detail Three (master id = 3)' }
         ],
         proxy: {
             type: 'memory',
@@ -95,7 +111,7 @@
                 fieldLabel: 'Master combo',
                 itemId: 'master-combo',
                 detailEl: 'detail-combo', // <--- itemId of detail combo
-                detailField: 'id', // <--- The "foreign key" for store of detail combo
+                detailField: 'master_id', // <--- The "foreign key" for store of detail combo
                 name: 'name',
                 displayField: 'display',
                 valueField: 'id',
@@ -106,16 +122,11 @@
                 store: Ext.getStore('masterStore')
             },{
                 xtype:'combo',
-                plugins: [
-                    'detailset'
-                ],
                 fieldLabel: 'Detail combo',
                 itemId: 'detail-combo',
-                detailEl: 'master-combo', // <--- itemId of master combo (if you need it)
-                detailField: 'id', // <--- The "foreign key" for store of master combo
                 name: 'name2',
                 displayField: 'display',
-                valueField: 'id',
+                valueField: 'master_id',
                 queryMode: 'local',
                 typeAhead: true,
                 selectOnFocus: true,
