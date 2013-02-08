@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>{title}</title>
+        <!-- ExtJS -->
+        <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
+        <script src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all.js" type="text/javascript"></script>
+        <!--<link rel="stylesheet" type="text/css" href="http://ext-4.1.1a/resources/css/ext-all.css" />
+        <script src="http://ext-4.1.1a/ext-all-debug.js" type="text/javascript"></script>-->
+        <style>
+            body {
+                padding: 30px;
+            }
+        </style>
+
+
+
+
+    </head>
+
+    <body>
+        <script>
+            /**
+             * store
+             */
+            Ext.create('Ext.data.Store', {
+                storeId:'someStore',
+                fields:['name', 'is_active'],
+                data:{'items':[
+                        { 'name': 'Lisa',  'is_active': true },
+                        { 'name': 'Bart',  'is_active': false },
+                    ]},
+                proxy: {
+                    type: 'memory',
+                    reader: {
+                        type: 'json',
+                        root: 'items'
+                    }
+                }
+            });
+
+            /**
+             * somepanel
+             */
+            Ext.define('App.view.Somepanel', {
+                extend: 'Ext.form.Panel',
+                title: 'Filter panel',
+                alias: 'widget.filterspanel',
+                initComponent: function() {
+                    this.items = [{
+                        xtype: 'textfield',
+                        fieldLabel: 'Label'
+                    }];
+                    this.callParent(arguments);
+                }
+            });
+
+
+            /**
+             * detailform
+             */
+            Ext.define('App.view.Detailform', {
+                extend: 'Ext.form.Panel',
+                title: 'DetailForm',
+                alias: 'widget.detailform',
+                layout: 'anchor',
+
+                initComponent: function() {
+                    this.items = [{
+                        xtype: 'textfield',
+                        fieldLabel: 'Label'
+                    }];
+                    this.callParent(arguments);
+                }
+            });
+
+            /**
+             * grid
+             */
+            Ext.define('App.view.Somegrid', {
+                extend: 'Ext.grid.Panel',
+                title: 'Grid',
+                alias: 'widget.somegrid',
+                itemId: 'mygrid',
+
+                initComponent: function() {
+                    Ext.apply(this, {
+                        columns: [{
+                                text: 'Name',
+                                dataIndex: 'name',
+                                flex: 1
+                            },{
+                                text: 'Active',
+                                dataIndex: 'is_active',
+                                flex: 1
+                            }],
+                        store: Ext.data.StoreManager.lookup('someStore'),
+                        tbar: [{
+                            xtype: 'button',
+                            text: 'Button'
+                        }],
+                        detailForm: {
+                            xtype: 'detailform',
+                            collapsible: true,
+                            collapsed: true
+                        },
+                        filtersForm: {
+                            xtype: 'filterspanel',
+                            collapsible: true,
+                            collapsed: false
+                        }
+                    })
+                    this.callParent(arguments);
+                }
+            });
+
+            /*
+             * abstract viewport
+             */
+            Ext.define('App.view.AbstractContainer', {
+                extend: 'Ext.Container',
+                height: 500,
+                layout: 'border',
+                renderTo: Ext.getBody(),
+
+
+                initComponent: function() {
+                    this.callParent(arguments);
+                    this.buildPanels();
+                },
+
+                buildPanels: function() {
+                    var grid = this.down('grid');
+                    if(grid && grid.detailForm) {
+                        Ext.apply(grid.detailForm, {
+                            width: 200,
+                            region: 'east',
+                            collapsible: true,
+                            animCollapse: false,
+                            split: true
+                        })
+                        this.add(grid.detailForm);
+                    }
+                    if(grid && grid.filtersForm) {
+                        Ext.apply(grid.filtersForm, {
+                            width: 200,
+                            region: 'west',
+                            animCollapse: false,
+                            collapsible: true,
+                            split: true
+                        })
+                        this.add(grid.filtersForm);
+                    }
+                }
+
+            });
+
+
+            /*
+             * viewport
+             */
+            Ext.define('App.view.Container', {
+                extend: 'App.view.AbstractContainer',
+
+
+
+                initComponent: function() {
+                    Ext.apply(this, {
+                        items: [{
+                            xtype: 'somegrid',
+                            region: 'center'
+                        }]
+                    });
+                    this.callParent(arguments);
+                }
+            });
+
+
+            /**
+             * controller
+             */
+            Ext.define('App.controller.AppController', {
+                extend:'Ext.app.Controller',
+
+                init:function(){
+                    this.control({
+                    });
+
+                    this.application.on({
+                        launch: function() {
+                            Ext.create('App.view.Container');
+                        }
+                    });
+                }
+            });
+
+            Ext.onReady(function() {
+
+                Ext.Loader.setConfig({
+                    enabled: false,
+                    disableCaching: false
+                });
+
+                Ext.application({
+                    name: 'App',
+                    autoCreateViewport: false,
+
+                    controllers:[
+                        'AppController'
+                    ],
+                    views: [
+                        'Somepanel',
+                        'Detailform',
+                        'Somegrid'
+                    ],
+
+                    launch:function(){
+
+                    }
+                });
+
+            });
+        </script>
+    </body>
+
+</html>
