@@ -42,25 +42,6 @@
         <p><a href="http://habrahabr.ru/post/158513/">Post on habrahabr.ru</a> [ru]</p>
         <p>The js is not minified so it is readable. See <a href="https://github.com/werdender/ext4examples/blob/master/js/uploadform.js">uploadform.js</a>.</p>
         <div id="upload-form"></div>
-        <script>
-Ext.onReady(function() {
-    Ext.create('Ext.Button', {
-        renderTo: Ext.getBody(),
-        id : 'btnShowImage',
-        text : 'Show Image On List',
-        scale   : 'large',
-        width : 200,
-        margin : '0 0 0 180'
-    });
-
-    var ShowImgBtn = Ext.get('btnShowImage');
-    ShowImgBtn.on('click', function(){
-        alert('hi');
-    });
-
-
-});
-        </script>
     </body>
 
 </html>
