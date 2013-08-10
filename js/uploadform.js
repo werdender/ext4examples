@@ -52,7 +52,12 @@
 
 /**
 * form
+* 
+* 
 */
+
+Ext.onReady(function() { 
+     
     Ext.create('Ext.form.Panel', {
         renderTo: 'upload-form'
         ,width: 500
@@ -100,3 +105,5 @@
             }
         }]
     });
+    
+});
