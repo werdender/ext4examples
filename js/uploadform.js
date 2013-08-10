@@ -1,7 +1,4 @@
-Ext.onReady(function() {
-
-
-    /**
+/**
 * xtype
 */
     Ext.define('fileupload',{
@@ -53,7 +50,7 @@ Ext.onReady(function() {
         }
     });
 
-    /**
+/**
 * form
 */
     Ext.create('Ext.form.Panel', {
@@ -103,4 +100,3 @@ Ext.onReady(function() {
             }
         }]
     });
-});
