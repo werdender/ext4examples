@@ -57,7 +57,7 @@ Ext.onReady(function() {
      * form
      */
     Ext.create('Ext.form.Panel', {
-        renderTo: 'upload-form'
+        renderTo: 'upload-form1'
         ,width: 500
         ,height: 150
         ,fileUpload: true
