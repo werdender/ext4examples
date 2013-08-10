@@ -2,15 +2,15 @@ Ext.onReady(function() {
 
 
     /**
-     * xtype
-     */
+* xtype
+*/
     Ext.define('fileupload',{
         extend: 'Ext.form.field.Text'
         ,alias: 'widget.fileupload'
         ,inputType: 'file'
         ,listeners: {
             render: function (me, eOpts) {
-                var el = Ext.get(me.id+'-inputEl');
+                var el = Ext.get(me.id).down('input'); //<-- 4.0.7
                 el.set({
                     size: me.inputSize || 1
                 });
@@ -24,15 +24,15 @@ Ext.onReady(function() {
     });
 
     /**
-     * vtype
-     */
+* vtype
+*/
     Ext.apply(Ext.form.field.VTypes, {
         file: function(val, field) {
             var input, files, file
             ,acceptSize = field.acceptSize || 4096 // default max size
             ,acceptMimes = field.acceptMimes || ['rtf', 'pdf', 'doc', 'xls', 'xlsx', 'zip', 'rar']; // default types
 
-            input = Ext.get(field.id+'-inputEl');
+            input = Ext.get(field.id).down('input'); //<-- 4.0.7
             files = input.getAttribute('files');
             if ( ! files || ! window.FileReader) {
                 return true;
@@ -54,10 +54,10 @@ Ext.onReady(function() {
     });
 
     /**
-     * form
-     */
+* form
+*/
     Ext.create('Ext.form.Panel', {
-        renderTo: 'upload-form1'
+        renderTo: 'upload-form'
         ,width: 500
         ,height: 150
         ,fileUpload: true
